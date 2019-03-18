@@ -53,6 +53,7 @@ function preload ()
     this.load.image('ground', 'assets/platform2.png');
     this.load.image('star', 'assets/dorayaki3.png');
     this.load.image('bomb', 'assets/bomb.png');
+    this.load.image('egg', 'assets/egg.png');
     this.load.spritesheet('dude', 'assets/doraemon3.png', { frameWidth: 32, frameHeight: 48 });
 }
 
@@ -79,6 +80,8 @@ function create ()
     //  Player physics properties. Give the little guy a slight bounce.
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
+
+    e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
     //  Our player animations, turning, walking left and walking right.
     this.anims.create({
@@ -174,6 +177,10 @@ function update ()
     {
         player.setVelocityY(-330);
     }
+
+    if (e.isDown) {
+        teclaE();
+    }
 }
 
 function collectStar (player, star)
@@ -216,6 +223,15 @@ function hitBomb (player, bomb)
         player.anims.play('turn');
         gameOver = true;
     }
+}
+
+function teclaE () {
+    var bomb = bombs.create(x, 16, 'egg');
+    bomb.setScale(0.1);
+    bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
+    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+    bomb.allowGravity = false;
 }
 
 </script>

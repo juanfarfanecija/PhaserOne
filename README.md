@@ -1,2 +1,2 @@
 # PhaserOne
-Pendiente de codificar el efecto de la tecla E par EasterEgg
+Juego 2D desarrollado en Phaser3

@@ -45,6 +45,7 @@ var teclaE = false;
 var invincible = false;
 var scoreText;
 var levelText;
+var userText;
 
 var game = new Phaser.Game(config);
 
@@ -183,6 +184,7 @@ function update ()
 
     if (e.isDown) {
         teclaE = true;
+        userText.setText('By jeffar (e)');
     }
 }
 

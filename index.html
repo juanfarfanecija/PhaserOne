@@ -12,7 +12,6 @@
 </head>
 <body>
 
-
 <script type="text/javascript">
 
 var config = {
@@ -35,12 +34,14 @@ var config = {
 
 var player;
 var stars;
+var huevos;
 var bombs;
 var platforms;
 var cursors;
 var score = 0;
 var level = 0;
 var gameOver = false;
+var teclaE = false;
 var invincible = false;
 var scoreText;
 var levelText;
@@ -52,8 +53,8 @@ function preload ()
     this.load.image('sky', 'assets/sky.jpg');
     this.load.image('ground', 'assets/platform2.png');
     this.load.image('star', 'assets/dorayaki3.png');
-    this.load.image('bomb', 'assets/bomb.png');
     this.load.image('egg', 'assets/egg.png');
+    this.load.image('bomb', 'assets/bomb.png');
     this.load.spritesheet('dude', 'assets/doraemon3.png', { frameWidth: 32, frameHeight: 48 });
 }
 
@@ -121,6 +122,7 @@ function create ()
 
     });
 
+    huevos = this.physics.add.group();
     bombs = this.physics.add.group();
 
     //  The score
@@ -132,11 +134,12 @@ function create ()
     //  Collide the player and the stars with the platforms
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(stars, platforms);
+    this.physics.add.collider(huevos, platforms);
     this.physics.add.collider(bombs, platforms);
 
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
     this.physics.add.overlap(player, stars, collectStar, null, this);
-
+    this.physics.add.collider(player, huevos, premioPuntos, null, this);
     this.physics.add.collider(player, bombs, hitBomb, null, this);
 }
 
@@ -179,7 +182,7 @@ function update ()
     }
 
     if (e.isDown) {
-        teclaE();
+        teclaE = true;
     }
 }
 
@@ -202,6 +205,15 @@ function collectStar (player, star)
 
         var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 
+        if (teclaE) {
+            var huevo = huevos.create(100, 16, 'egg');
+            huevo.setScale(0.1);
+            huevo.setBounce(1);
+            huevo.setCollideWorldBounds(true);
+            huevo.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            huevo.allowGravity = false;
+        }
+
         var bomb = bombs.create(x, 16, 'bomb');
         bomb.setBounce(1);
         bomb.setCollideWorldBounds(true);
@@ -209,9 +221,7 @@ function collectStar (player, star)
         bomb.allowGravity = false;
 
         level++;
-
-        levelText.setText('Fase:   ' + level);
-
+        levelText.setText('Fase: ' + level);
     }
 }
 
@@ -226,13 +236,10 @@ function hitBomb (player, bomb)
     }
 }
 
-function teclaE () {
-    var bomb = bombs.create(x, 16, 'egg');
-    bomb.setScale(0.1);
-    bomb.setBounce(1);
-    bomb.setCollideWorldBounds(true);
-    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-    bomb.allowGravity = false;
+function premioPuntos (player, huevo)
+{
+    score += 1;
+    scoreText.setText('Puntos: ' + score);
 }
 
 </script>
